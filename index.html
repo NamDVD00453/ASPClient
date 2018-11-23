@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASP Client</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body onload="init()">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center">Employee List</h4>
+                <a href="add.html">Add Employee</a>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group">
+                        <input type="text" id="key">
+                        <button type="button" onclick="search()">Search</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Salary</th>
+                            <th>Department</th>
+                            <th>Email</th>
+                        </tr>
+                        </thead>
+                        <tbody id="ulList">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+<script>
+    function init() {
+        var xhr = new XMLHttpRequest();
+        var body = document.getElementById("ulList");
+
+        xhr.open("GET","https://localhost:44356/api/employees");
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4){
+                if (this.status === 200 ||this.status === 201){
+                    var listEmpl = JSON.parse(xhr.responseText);
+                    console.log(listEmpl);
+                    for (item in listEmpl){
+                        console.log(item);
+                        body.innerHTML += "<tr>\n" +
+                            "                    <td>" + item +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["employeeName"] +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["salary"] +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["department"] +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["email"] +
+                            "</td>\n" +
+                            "                </tr>";
+                    }
+                }
+                else {
+                    alert(this.status);
+
+                }
+            }
+        }
+    }
+
+    function search() {
+        var key = document.getElementById("key").value;
+        var xhr = new XMLHttpRequest();
+        var body = document.getElementById("ulList");
+        xhr.open("GET","https://localhost:44356/api/search/" + key);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4){
+                if (this.status === 200 ||this.status === 201){
+                    var listEmpl = JSON.parse(xhr.responseText);
+                    body.innerHTML = "";
+                    console.log(listEmpl);
+                    for (item in listEmpl){
+                        console.log(item);
+                        body.innerHTML += "<tr>\n" +
+                            "                    <td>" + item +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["employeeName"] +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["salary"] +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["department"] +
+                            "</td>\n" +
+                            "                    <td>" + listEmpl[item]["email"] +
+                            "</td>\n" +
+                            "                </tr>";
+                    }
+                }
+                else {
+                    init();
+
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>

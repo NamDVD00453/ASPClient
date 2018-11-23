@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <form class="card" action="javascript: submit()">
+            <div class="card-header">
+                <div class="text-center">Add Employee</div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="label">Name</div>
+                    <input type="text" class="form-control text-black-50" id="name" name="Name">
+                </div>
+
+                <div class="form-group">
+                    <div class="label">Salary</div>
+                    <input type="number" class="form-control text-black-50" id="salary" name="Salary">
+                </div>
+
+                <div class="form-group">
+                    <div class="label">Department</div>
+                    <input type="text" class="form-control text-black-50" id="department" name="Department">
+                </div>
+
+                <div class="form-group">
+                    <div class="label">Email</div>
+                    <input type="email" class="form-control text-black-50" id="email" name="Email">
+                </div>
+
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Accept</button>
+        </form>
+    </div>
+    <script>
+        function submit() {
+            var empl = {
+                "employeeName":document.getElementById("name").value,
+                "salary":parseInt(document.getElementById("salary").value),
+                "department":document.getElementById("department").value,
+                "email":document.getElementById("email").value
+
+            };
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST","https://localhost:44356/api/employees");
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(JSON.stringify(empl));
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4){
+                    if (this.status === 200 || this.status === 201){
+                        alert("Added Success!");
+                        location.replace("index.html")
+                    }
+                    else {
+                        alert(this.status);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
